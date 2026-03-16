@@ -1,4 +1,4 @@
-# Assignment 02: Complexity Analysis & Performance Report
+# Assignment 01: Complexity Analysis & Performance Report
 
 **Course:** 2026 Algorithm Lecture (Korea Univ. 26-1)  
 **Topic:** Empirical Validation of Time Complexity (O(1), O(n), O(n²))  
