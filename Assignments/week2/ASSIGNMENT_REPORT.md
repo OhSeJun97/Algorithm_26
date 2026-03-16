@@ -1,123 +1,87 @@
+<style>
+  body {
+    font-size: 11pt;
+    font-family: 'Times New Roman', Times, serif;
+    line-height: 1.6;
+    margin: 40px;
+  }
+  h1, h2, h3 { color: #2c3e50; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+  th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+  th { background-color: #f8f9fa; }
+  img { max-width: 100%; height: auto; display: block; margin: 20px auto; border: 1px solid #eee; }
+  .caption { text-align: center; font-style: italic; color: #666; font-size: 10pt; margin-top: -10px; margin-bottom: 20px; }
+</style>
+
 # Assignment 02: Complexity Analysis & Performance Report
 
 **Course:** 2026 Algorithm Lecture (Korea Univ. 26-1)  
-**Topic:** Time Complexity (O(1), O(n), O(n²)) Validation  
-**Student:** OhSeJun  
-**Date:** March 16, 2026  
-**GitHub Repository:** [https://github.com/OhSeJun97/Algorithm_26](https://github.com/OhSeJun97/Algorithm_26)
+**Topic:** Empirical Validation of Time Complexity (O(1), O(n), O(n²))  
+**Student ID / Name:** OhSeJun  
+**Date:** March 16, 2026
 
 ---
 
-## 1. Complexity Analysis (Deliverable 1)
+## 1. Experimental Setup & Implementation
 
-This project implements three different search strategies to demonstrate how algorithmic complexity affects system performance.
+We implemented three search strategies within a FastAPI backend to observe their performance characteristics under load.
 
-### A. ID Lookup: $O(1)$ (Constant Time)
-- **Endpoint:** `/search/id`
-- **Theory:** Uses a Python Dictionary (Hash Map). The time required to find an element by its key is independent of the total number of elements ($n$).
-- **Implementation:** `products_dict.get(id)` provides direct access.
+### A. Search Strategies
+- **ID Lookup ($O(1)$):** Uses a pre-populated Python dictionary. Retrieval time is independent of the dataset size.
+- **Name Search ($O(n)$):** Scans the list of 1,000 products once using a list comprehension.
+- **Duplicate Detection ($O(n^2)$):** Employs nested loops to compare every product pair ($N \times N$) to identify duplicate names.
 
-### B. Name Search: $O(n)$ (Linear Time)
-- **Endpoint:** `/search/name`
-- **Theory:** Uses a single `for` loop (list comprehension) to scan all products. The execution time grows proportionally with the number of products.
-- **Implementation:** `[p for p in products_list if q in p["name"].lower()]`
+### B. Screenshot Evidence (Search Results)
 
-### C. Duplicate Detection: $O(n^2)$ (Quadratic Time)
-- **Endpoint:** `/search/duplicates`
-- **Theory:** Uses nested `for` loops to compare every product pair. If the dataset size doubles, the execution time increases fourfold.
-- **Implementation:** 
-  ```python
-  for i in range(n):
-      for j in range(i + 1, n):
-          if products_list[i]["name"] == products_list[j]["name"]:
-              # Comparison logic
-  ```
+![ID Search Result](../locust_search_id.png)
+<div class="caption">Figure 1: O(1) Search result showing constant-time response (minimal latency).</div>
+
+![Name Search Result](../locust_search_name.png)
+<div class="caption">Figure 2: O(n) Search result showing linear scanning of the product list.</div>
+
+![Duplicate Search Result](../locust_search_duplicates.png)
+<div class="caption">Figure 3: O(n²) Search result showing significantly higher latency for the same dataset.</div>
 
 ---
 
-## 2. Evidence of Implementation (Deliverable 2)
+## 2. Performance Evaluation (Locust Load Test)
 
-The backend is built using **FastAPI**.
+We simulated up to **50 concurrent users** using Locust to evaluate how the server handles stress across different complexities.
 
-### Implementation Snippets
+### A. Load Test Execution
+![Locust Main](../locust_main.png)
+<div class="caption">Figure 4: Locust load test configuration (50 concurrent users).</div>
 
-```python
-# O(1) Implementation (Dictionary)
-@app.get("/search/id")
-async def search_by_id(id: int):
-    result = products_dict.get(id) # Immediate access
-    return {"complexity": "O(1)", "results": [result]}
+### B. Statistical Results
 
-# O(n^2) Implementation (Nested Loops)
-@app.get("/search/duplicates")
-async def find_duplicates():
-    for i in range(n):
-        for j in range(i + 1, n): # Nested loop comparing every pair
-            if products_list[i]["name"] == products_list[j]["name"]:
-                # Logic to collect duplicates
-    return {"complexity": "O(n^2)"}
-```
+| Search Type | Complexity | Avg Response Time (ms) | Max Response Time (ms) |
+| :--- | :---: | :---: | :---: |
+| **ID Lookup** | $O(1)$ | **~1 ms** | **~5 ms** |
+| **Name Search** | $O(n)$ | **~3 ms** | **~12 ms** |
+| **Duplicate Search** | $O(n^2)$ | **~25 ms** | **~150+ ms** |
 
----
+![Locust Statistics](../locust_statistics.png)
+<div class="caption">Figure 5: Detailed performance statistics by endpoint.</div>
 
-## 3. Performance Results & Comparison (Deliverable 3)
-
-Based on actual testing with 1,000 product items, the execution times were measured as follows:
-
-| Search Type | Complexity | Execution Time (ms) | Speed Ratio |
-| :--- | :--- | :--- | :--- |
-| **ID Lookup** | $O(1)$ | **0.0012 ms** | 1x (Baseline) |
-| **Duplicate Search** | $O(n^2)$ | **21.7074 ms** | **~18,089x Slower** |
-
-### Performance Test Results
-
-![Locust Statistics](../../locust_statistics.png)
-
-위 통계 화면에서 볼 수 있듯, $O(n^2)$ 복잡도를 가지는 `/search/duplicates`의 Average 응답 시간이 `/search/id` (O(1)) 및 `/search/name` (O(n)) 에 비해 압도적으로 높음을 확인할 수 있습니다.
+### C. Scalability Chart
+![Locust Chart](../locust_chart.png)
+<div class="caption">Figure 6: Response time chart showing exponential degradation for O(n²).</div>
 
 ---
 
-## 4. Load Testing Analysis (Locust)
+## 3. Analysis: Why $O(n^2)$ Degrades Under Load
 
-Using **Locust**, multiple virtual users were simulated to stress the server.
+The performance gap between $O(1)$ and $O(n^2)$ is not just mathematical but has significant real-world implications:
 
-### Load Testing Charts
-
-![Locust Main](../../locust_main.png)
-*(Locust 부하 테스트 실행 화면)*
-
-![Locust Chart](../../locust_chart.png)
-
-- **Findings:**
-    - Frequent calls to `/search/duplicates` caused a sharp spike in CPU usage.
-    - As concurrent users increased, the response time for the $O(n^2)$ endpoint degraded exponentially (그래프 상의 우상향 곡선 확인).
-    - The $O(1)$ endpoint maintained stable response times regardless of the load, proving its scalability.
+1.  **Quadratic Growth:** With 1,000 items, $O(n)$ performs 1,000 operations, while $O(n^2)$ performs **1,000,000 operations**. When 50 users request this simultaneously, the CPU must handle 50 million operations, leading to a bottleneck.
+2.  **CPU Starvation:** $O(n^2)$ logic consumes nearly 100% of a CPU core during execution. Under high concurrency, requests are queued because the CPU cannot clear previous tasks fast enough, causing "Tail Latency" to skyrocket.
+3.  **Real-World Impact:** As seen in Figure 6, while $O(1)$ and $O(n)$ remain stable, the $O(n^2)$ response time (yellow/green lines) spikes as user count grows, eventually leading to timeouts and a degraded user experience.
 
 ---
 
-## 5. Conclusion (Ideal Solution)
+## 4. Conclusion
 
-To optimize the $O(n^2)$ duplicate detection to $O(n)$:
-1. Use a **Hash Set** or **Dictionary** to track names already seen while iterating through the list once.
-2. This would reduce the comparison count from $500,000$ down to $1,000$, making the "Duplicates" search as efficient as a linear scan.
-
----
-
-## 6. How to Reproduce (Testing Guide)
-
-The source code and testing environment are fully documented and available at the [GitHub Repository](https://github.com/OhSeJun97/Algorithm_26).
-
-### 1. Start the FastAPI Server (Port 8000)
-```bash
-cd Assignments/week2
-python app.py
-```
-
-### 2. Run the Load Test (Port 8089)
-```bash
-# In a new terminal
-locust -f locustfile.py --host=http://localhost:8000
-```
+The results empirically prove that $O(n^2)$ algorithms are the primary cause of system instability in high-traffic environments. To optimize, a **Hash-based approach** (using a set for duplicate checking) should be used to reduce the complexity to $O(n)$, ensuring system reliability even under extreme load.
 
 ---
 *End of Report*
