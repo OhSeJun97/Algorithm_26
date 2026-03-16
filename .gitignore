@@ -1,0 +1,14 @@
+# 모든 것을 제외하고 Assignments/week2만 허용
+/*
+!/Assignments/
+!/Assignments/week2/
+!/Assignments/week2/**
+!/.gitignore
+
+# 불필요한 파이썬 캐시 등 제외
+**/__pycache__/
+**/*.py[cod]
+**/*.class
+**/.DS_Store
+**/.venv/
+**/venv/
