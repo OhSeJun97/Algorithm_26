@@ -18,13 +18,13 @@ We implemented three search strategies within a FastAPI backend to observe their
 
 ### B. Screenshot Evidence (Search Results)
 
-![ID Search Result](Assignments/week2/.images/locust_search_id.png)
+![ID Search Result](.images/locust_search_id.png)
 <div class="caption">Figure 1: O(1) Search result showing constant-time response (minimal latency).</div>
 
-![Name Search Result](../locust_search_name.png)
+![Name Search Result](.images/locust_search_name.png)
 <div class="caption">Figure 2: O(n) Search result showing linear scanning of the product list.</div>
 
-![Duplicate Search Result](../locust_search_duplicates.png)
+![Duplicate Search Result](.images/locust_search_duplicates.png)
 <div class="caption">Figure 3: O(n²) Search result showing significantly higher latency for the same dataset.</div>
 
 ---
@@ -34,7 +34,7 @@ We implemented three search strategies within a FastAPI backend to observe their
 We simulated up to **50 concurrent users** using Locust to evaluate how the server handles stress across different complexities.
 
 ### A. Load Test Execution
-![Locust Main](../locust_main.png)
+![Locust Main](.images/locust_main.png)
 <div class="caption">Figure 4: Locust load test configuration (50 concurrent users).</div>
 
 ### B. Statistical Results
@@ -45,11 +45,11 @@ We simulated up to **50 concurrent users** using Locust to evaluate how the serv
 | **Name Search** | $O(n)$ | **~3 ms** | **~12 ms** |
 | **Duplicate Search** | $O(n^2)$ | **~25 ms** | **~150+ ms** |
 
-![Locust Statistics](../locust_statistics.png)
+![Locust Statistics](.images/locust_statistics.png)
 <div class="caption">Figure 5: Detailed performance statistics by endpoint.</div>
 
 ### C. Scalability Chart
-![Locust Chart](../locust_chart.png)
+![Locust Chart](.images/locust_chart.png)
 <div class="caption">Figure 6: Response time chart showing exponential degradation for O(n²).</div>
 
 ---
@@ -70,18 +70,3 @@ The results empirically prove that $O(n^2)$ algorithms are the primary cause of 
 
 ---
 *End of Report*
-
-<style>
-  body {
-    font-size: 11pt;
-    font-family: 'Times New Roman', Times, serif;
-    line-height: 1.6;
-    margin: 40px;
-  }
-  h1, h2, h3 { color: #2c3e50; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-  th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-  th { background-color: #f8f9fa; }
-  img { max-width: 100%; height: auto; display: block; margin: 20px auto; border: 1px solid #eee; }
-  .caption { text-align: center; font-style: italic; color: #666; font-size: 10pt; margin-top: -10px; margin-bottom: 20px; }
-</style>
