@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Playlist Manager</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Music Playlist Manager</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="songCount">Number of Songs:</label>
+                <input type="number" id="songCount" value="10" min="1" max="5000">
+                <button id="generateBtn">Generate Random</button>
+            </div>
+            
+            <div class="control-group">
+                <label for="criterion">Sort Criterion:</label>
+                <select id="criterion">
+                    <option value="title">Title</option>
+                    <option value="artist">Artist</option>
+                    <option value="duration">Duration</option>
+                    <option value="play_count">Play Count</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="algorithm">Algorithm:</label>
+                <select id="algorithm">
+                    <option value="selection">Selection Sort (O(n²))</option>
+                    <option value="insertion">Insertion Sort (O(n²))</option>
+                    <option value="merge">Merge Sort (O(n log n))</option>
+                </select>
+                <button id="sortBtn">Sort</button>
+                <button id="compareBtn">Compare All</button>
+            </div>
+        </div>
+
+        <div id="stats" class="stats-container" style="display: none;">
+            <h3>Sorting Results</h3>
+            <p>Algorithm: <span id="resAlgo">-</span></p>
+            <p>Comparisons: <span id="resComp">-</span></p>
+            <p>Swaps/Moves: <span id="resSwaps">-</span></p>
+            <p>Execution Time: <span id="resTime">-</span> ms</p>
+        </div>
+
+        <div id="comparisonTableContainer" style="display: none;">
+            <h3>Algorithm Comparison</h3>
+            <table id="comparisonTable">
+                <thead>
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Comparisons</th>
+                        <th>Swaps/Moves</th>
+                        <th>Time (ms)</th>
+                    </tr>
+                </thead>
+                <tbody id="comparisonBody"></tbody>
+            </table>
+        </div>
+
+        <div class="playlist-container">
+            <h3>Playlist</h3>
+            <table id="playlistTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Artist</th>
+                        <th>Duration (s)</th>
+                        <th>Play Count</th>
+                    </tr>
+                </thead>
+                <tbody id="playlistBody"></tbody>
+            </table>
+        </div>
+    </div>
+    <script src="/static/app.js"></script>
+</body>
+</html>
