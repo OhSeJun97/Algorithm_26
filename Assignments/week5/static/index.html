@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Reservation System</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Classroom Reservation System</h1>
+        <p class="subtitle">Greedy Activity Selection — Maximize Non-Overlapping Events</p>
+        
+        <div class="controls-grid">
+            <div class="card add-manual">
+                <h3>Add Reservation</h3>
+                <div class="form-group">
+                    <input type="text" id="res-name" placeholder="Event Name (e.g., CS101)">
+                    <div class="time-inputs">
+                        <input type="number" id="res-start" placeholder="Start (9.0)" step="0.5" min="9" max="18">
+                        <input type="number" id="res-end" placeholder="End (11.0)" step="0.5" min="9" max="18">
+                    </div>
+                    <button id="add-btn">Add to List</button>
+                </div>
+            </div>
+            
+            <div class="card random-gen">
+                <h3>Sample Data</h3>
+                <input type="number" id="gen-count" value="15" min="1" max="50">
+                <button id="gen-btn">Generate Random</button>
+                <button id="clear-btn" class="secondary">Clear All</button>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <button id="schedule-btn" class="primary">Schedule (Greedy Algorithm)</button>
+        </div>
+
+        <div class="visualizer-container">
+            <h3>Timeline Visualization (9:00 - 18:00)</h3>
+            <canvas id="canvas" width="840" height="400"></canvas>
+            <div class="legend">
+                <span class="legend-item"><span class="box gray"></span> All Requests</span>
+                <span class="legend-item"><span class="box green"></span> Selected</span>
+            </div>
+        </div>
+
+        <div class="stats-box" id="stats-box" style="display: none;">
+            Selected: <span id="selected-count">0</span> / Total Requests: <span id="total-count">0</span>
+        </div>
+
+        <div class="results-grid">
+            <div class="card">
+                <h3>Trace (Step-by-Step)</h3>
+                <div id="trace-list" class="scroll-list">
+                    <p class="empty-text">No data to display. Run schedule first.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/app.js"></script>
+</body>
+</html>
