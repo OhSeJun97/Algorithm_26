@@ -27,7 +27,7 @@
 ## 3. Results & Performance Analysis
 
 ### 3.1 Application Screenshot
-![alt text](assignment_week4.png)
+![alt text](image/assignment_week4.png)
 
 ### 3.2 Performance Table
 다양한 점의 개수(**n**)에 따른 두 알고리즘의 실행 시간 비교 결과입니다.

@@ -9,7 +9,7 @@
 ---
 ## 3. Results & Step-by-Step Trace
 ### 3.1 Application Screenshot
-<img src="assignment_week5_capture.png" width="400" alt="Reservation System Screenshot">
+<img src="image/assignment_week5_capture.png" width="400" alt="Reservation System Screenshot">
 
 ### 3.2 Step-by-Step Trace
 | Order | Event Name | Interval | Status | Reason |
